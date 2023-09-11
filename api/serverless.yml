@@ -1,0 +1,13 @@
+service: content_generator
+frameworkVersion: "3"
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+
+functions:
+  script:
+    handler: functions/script-generator.handler
+
+plugins:
+  - serverless-esbuild
