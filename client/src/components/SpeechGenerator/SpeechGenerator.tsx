@@ -3,10 +3,10 @@ import { Polly, SynthesizeSpeechCommand } from "@aws-sdk/client-polly";
 import { defaultText } from "./SpeechEditor/DefaultText";
 import SpeechEditor from "./SpeechEditor/SpeechEditor";
 
-interface SpeechProps {}
+interface SpeechGeneratorProps {}
 
 const config = {
-  region: "us-east-1", // Change to your desired region
+  region: "us-east-1",
   credentials: {
     accessKeyId: "",
     secretAccessKey: "",
@@ -15,7 +15,7 @@ const config = {
 
 const pollyClient = new Polly(config);
 
-export default function Speech(props: SpeechProps): ReactElement {
+export default function SpeechGenerator(props: SpeechGeneratorProps): ReactElement {
   const [text, setText] = useState<string | null>(defaultText);
   const [audioURL, setAudioURL] = useState("");
   const [generating, setGenerating] = useState<boolean>(false);
