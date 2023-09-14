@@ -40,8 +40,8 @@ function VideoScriptGenerator({ onSelectScript }: Props) {
     const matches = result.choices.pop()?.message?.content?.match(/"(.*?)"/g);
 
     if (matches) {
-      for (let i = 0; i < matches.length; ++i) {
-        const match = matches[i];
+      for (const element of matches) {
+        const match = element;
         const substring = match.substring(1, match.length - 1); // quotation mark removing
         console.log(substring);
       }
@@ -67,10 +67,10 @@ function VideoScriptGenerator({ onSelectScript }: Props) {
               crossOrigin={undefined}
             />
           </div>
-          <Button onClick={onGenerateClick}>
+          <Button className="flex justify-center" onClick={onGenerateClick}>
             {isLoading ? (
               <>
-                <Spinner /> Generating...
+                <Spinner /> <span className="mx-3">Generating...</span>
               </>
             ) : (
               "Generate"
