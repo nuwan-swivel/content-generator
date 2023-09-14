@@ -11,7 +11,7 @@ import {
   Typography,
 } from "@material-tailwind/react";
 import { useState } from "react";
-import "./start.css";
+import "./ImageGenerator.css";
 function countWords(str: string) {
   // Use a regular expression to split the string by spaces and punctuation
   const words = str.split(/\s+|\p{P}/u);
