@@ -6,11 +6,12 @@ import {
   CardFooter,
   CardHeader,
   Input,
+  Spinner,
   Textarea,
   Typography,
 } from "@material-tailwind/react";
 import { useState } from "react";
-import { greatedImage } from "../../data";
+import "./ImageGenerator.css";
 function countWords(str: string) {
   // Use a regular expression to split the string by spaces and punctuation
   const words = str.split(/\s+|\p{P}/u);
@@ -52,10 +53,12 @@ function ImageGenerator({ selectedScript }: Props) {
   const [generateImageCount, setGenerateImageCount] = useState(3);
   const [createdImages, setCreatedImages] = useState([] as GeneratedImage[]);
   const [videoUrl, setVideoUrl] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   function submitAi() {
+    setIsLoading(true);
     const options = {
       method: "POST",
-      url: "https://api.edenai.run/v2/image/generation",
+      url: "https://api.edenai.run/v2/image/generations",
       headers: {
         authorization:
           "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiYzE4ZjMxMGYtM2VmYy00NGE5LWI2ZTAtYzEyNjRmYmMyOGRiIiwidHlwZSI6ImFwaV90b2tlbiJ9.V-Z9tfoE6cKLYY-en2N7qjrMClld3asqvhvpzLqhCRA",
@@ -64,7 +67,7 @@ function ImageGenerator({ selectedScript }: Props) {
         providers: "openai",
         text: script,
         resolution: "512x512",
-        num_images: generateImageCount,
+        num_images: 1,
       },
     };
     axios
@@ -72,9 +75,11 @@ function ImageGenerator({ selectedScript }: Props) {
       .then((response: Response) => {
         console.log("response.data", response.data);
         setCreatedImages(response.data.openai.items);
+        setIsLoading(false);
       })
       .catch((error: unknown) => {
         console.error(error);
+        setIsLoading(false);
       });
   }
 
@@ -105,52 +110,33 @@ function ImageGenerator({ selectedScript }: Props) {
 
   return (
     <>
-      <div className="flex justify-center m-10">
-        <Card className=" w-96">
-          <CardHeader
-            variant="gradient"
-            color="gray"
-            className="mb-4 grid h-28 place-items-center"
-          >
-            Images for your video
-          </CardHeader>
-          <CardBody className="flex flex-col gap-4">
+      <div className="wrapper">
+        <>
+          <div className="input-wrapper">
             <Textarea
               label="Enter Your Prompt"
               value={script}
               onChange={(e) => setScript(e.target.value)}
             />
-            <Input
-              label="Number of images"
-              type="number"
-              value={generateImageCount}
-              onChange={(e) =>
-                setGenerateImageCount(e.target.value as unknown as number)
-              }
-              crossOrigin={undefined}
-            />
-          </CardBody>
-          <CardFooter className="pt-0">
-            <Button
-              color="blue-gray"
-              className="ml-1 font-bold"
-              onClick={() => submitAi()}
-            >
-              Submit Generate
-            </Button>
-          </CardFooter>
-        </Card>
+          </div>
+          <Button
+            color="blue-gray"
+            className="ml-1 font-bold"
+            onClick={() => submitAi()}
+          >
+            {isLoading ? (
+              <>
+                <Spinner /> Generating...
+              </>
+            ) : (
+              "Generate Image"
+            )}
+          </Button>
+        </>
       </div>
-      <div className="container grid grid-cols-3 gap-2 mx-auto">
+      <div className="wrapper">
         {createdImages.map((image, index) => (
           <Card key={index} className="w-96 m-3 ">
-            <CardHeader
-              variant="gradient"
-              color="gray"
-              className="mb-4 grid h-20 place-items-center"
-            >
-              Image {index + 1}
-            </CardHeader>
             <CardBody className="flex flex-col gap-4">
               <Typography variant="h6" className="text-center">
                 <img
