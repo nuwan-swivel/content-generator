@@ -11,12 +11,12 @@ import {
 } from "@material-tailwind/react";
 import OpenAI from "openai";
 import React, { useState } from "react";
-import "./start.css";
+import "./VideoScriptGenerator.css";
 
 interface Props {
   onSelectScript: (script: string) => void;
 }
-function StartPage({ onSelectScript }: Props) {
+function VideoScriptGenerator({ onSelectScript }: Props) {
   const [prompt, setPrompt] = useState("");
   const [scripts, setScripts] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -118,4 +118,4 @@ function StartPage({ onSelectScript }: Props) {
   );
 }
 
-export default StartPage;
+export default VideoScriptGenerator;
