@@ -45,16 +45,6 @@ function ImageGeneration() {
   const [generateImageCount, setGenerateImageCount] = useState(1);
   const [createdImages, setCreatedImages] = useState([] as GeneratedImage[]);
   function submitAi() {
-    const wordCount = countWords(prompt);
-    console.log("🚀 ~ file: Edenai.tsx:30 ~ submitAi ~ wordCount:", wordCount);
-    console.log("🚀 ~ file: Edenai.tsx:30 ~ submitAi ~ prompt:", prompt);
-    console.log(
-      "🚀 ~ file: Edenai.tsx:30 ~ submitAi ~ generateImageCount:",
-      generateImageCount
-    );
-
-    // return;
-    if (wordCount <= 5) return;
     const options = {
       method: "POST",
       url: "https://api.edenai.run/v2/image/generation",
