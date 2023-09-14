@@ -39,6 +39,9 @@ interface ResponseData {
 interface Response {
   data: ResponseData;
 }
+interface VideoResponse {
+  data: { message: string; videoUrl: string };
+}
 
 interface Props {
   selectedScript: string;
@@ -48,6 +51,7 @@ function ImageGeneration({ selectedScript }: Props) {
   const [script, setScript] = useState(selectedScript);
   const [generateImageCount, setGenerateImageCount] = useState(3);
   const [createdImages, setCreatedImages] = useState([] as GeneratedImage[]);
+  const [videoUrl, setVideoUrl] = useState("");
   function submitAi() {
     const options = {
       method: "POST",
@@ -69,7 +73,31 @@ function ImageGeneration({ selectedScript }: Props) {
         console.log("response.data", response.data);
         setCreatedImages(response.data.openai.items);
       })
+      .catch((error: unknown) => {
+        console.error(error);
+      });
+  }
 
+  function generateVideo() {
+    const images = createdImages.map((image) => image.image_resource_url);
+    const options = {
+      method: "POST",
+      url: "http://localhost:4000/video",
+      headers: {
+        authorization:
+          "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiYzE4ZjMxMGYtM2VmYy00NGE5LWI2ZTAtYzEyNjRmYmMyOGRiIiwidHlwZSI6ImFwaV90b2tlbiJ9.V-Z9tfoE6cKLYY-en2N7qjrMClld3asqvhvpzLqhCRA",
+      },
+      data: {
+        images,
+        text: "Hello Swivel",
+      },
+    };
+    axios
+      .request(options)
+      .then((response: VideoResponse) => {
+        console.log("response.data", response.data);
+        setVideoUrl(response.data.videoUrl);
+      })
       .catch((error: unknown) => {
         console.error(error);
       });

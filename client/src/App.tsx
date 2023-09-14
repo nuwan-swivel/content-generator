@@ -8,10 +8,11 @@ function App() {
   );
   return (
     <div className="App">
-      {!selectedScript && (
+      {/* {!selectedScript && (
         <StartPage onSelectScript={(script) => SetSelectedScript(script)} />
       )}
-      {selectedScript && <ImageGeneration selectedScript={selectedScript} />}
+      {selectedScript && <ImageGeneration selectedScript={selectedScript} />} */}
+      <ImageGeneration selectedScript={"Hello"} />
     </div>
   );
 }
