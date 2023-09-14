@@ -2,6 +2,14 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+
+Create a copy of the `example.env` file and rename it to `.env` and update the env values.
+
+- `REACT_APP_OPEN_AI_API_KEY=key`
+- `REACT_APP_AWS_ACCESS_KEY_ID=key`
+- `REACT_APP_AWS_SECRET_ACCESS_KEY=key`
+- `REACT_APP_EDEN_AI_API_KEY=key`
+
 ## Available Scripts
 
 In the project directory, you can run:
