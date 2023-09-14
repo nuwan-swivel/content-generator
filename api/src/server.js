@@ -1,5 +1,6 @@
 const express = require('express');
 const { createVideo } = require('./functions/video-generator');
+const { upload } = require('./functions/file-save.js');
 const cors = require('cors');
 const app = express();
 
@@ -24,11 +25,13 @@ app.post('/video', async (req, res) => {
    return res.status(200).send({message: 'Video created successfully', videoUrl});
 });
 
-app.post('/audio', async (req, res) => {
-    const {audio} = req.body;
-   const fileName = `video-${Math.random()*1000}.mp4`
-
-   return res.status(200).send({message: 'Audio created successfully', audio});
+// Create a POST endpoint for uploading audio files
+app.post('/upload', upload.single('audio'), (req, res) => {
+  // The uploaded file can be accessed as req.file
+  if (!req.file) {
+    return res.status(400).send('No file uploaded.');
+  }
+  return res.status(200).send('File uploaded successfully.');
 });
 
 app.get('/files/:filename', (req, res) => {
