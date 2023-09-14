@@ -58,7 +58,7 @@ function ImageGenerator({ selectedScript }: Props) {
     setIsLoading(true);
     const options = {
       method: "POST",
-      url: "https://api.edenai.run/v2/image/generations",
+      url: "https://api.edenai.run/v2/image/generation",
       headers: {
         authorization: `Bearer ${process.env.REACT_APP_EDEN_AI_API_KEY}`,
       },
