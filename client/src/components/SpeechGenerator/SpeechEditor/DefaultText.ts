@@ -1,0 +1,3 @@
+const defaultText = `Welcome to our <prosody pitch="+3st">Employee Onboarding Video</prosody> for a Tech Startup. <break time="300ms"></break>We believe that a smooth onboarding process is crucial for the success of both our new hires and our company. <emphasis level="strong">In this video, we will walk you through the essential steps</emphasis> to ensure a seamless transition into our organization. Let's get started!" "Step 1: Orientation`;
+
+export { defaultText };
