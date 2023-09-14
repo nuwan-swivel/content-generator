@@ -12,8 +12,14 @@ import SegmentImage from "./SegmentImage";
 
 interface Props {
   segments: VideoSegment[];
+  onSelectedImage: (imageUrl: string) => void;
+  onRemoveSelectedImage: (imageUrl: string) => void;
 }
-const Segments = ({ segments }: Props) => {
+const Segments = ({
+  segments,
+  onSelectedImage,
+  onRemoveSelectedImage,
+}: Props) => {
   return (
     <div>
       <Typography variant="h2">Finalize your video segments</Typography>
@@ -30,7 +36,11 @@ const Segments = ({ segments }: Props) => {
             <TabPanel key={i} value={i} className="py-0">
               <div className="w-full flex">
                 <div className="w-1/2">
-                  <SegmentImage imageScript={imageScript} />
+                  <SegmentImage
+                    imageScript={imageScript}
+                    onSelectedImage={onSelectedImage}
+                    onRemoveSelectedImage={onRemoveSelectedImage}
+                  />
                 </div>
                 <div className="w-1/2">
                   <Typography variant="h3">Audio script</Typography>
