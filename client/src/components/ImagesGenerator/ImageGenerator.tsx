@@ -11,7 +11,6 @@ import {
   Typography,
 } from "@material-tailwind/react";
 import { useState } from "react";
-import { greatedImage } from "../data";
 import "./start.css";
 function countWords(str: string) {
   // Use a regular expression to split the string by spaces and punctuation
@@ -49,7 +48,7 @@ interface Props {
   selectedScript: string;
 }
 
-function ImageGeneration({ selectedScript }: Props) {
+function ImageGenerator({ selectedScript }: Props) {
   const [script, setScript] = useState(selectedScript);
   const [generateImageCount, setGenerateImageCount] = useState(3);
   const [createdImages, setCreatedImages] = useState([] as GeneratedImage[]);
@@ -154,4 +153,4 @@ function ImageGeneration({ selectedScript }: Props) {
   );
 }
 
-export default ImageGeneration;
+export default ImageGenerator;

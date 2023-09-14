@@ -1,7 +1,6 @@
 import React, { useState } from "react";
-import logo from "./logo.svg";
-import ImageGeneration from "./components/image-generation";
-import StartPage from "./components/start";
+import ImageGenerator from "./components/ImagesGenerator/ImageGenerator";
+import VideoScriptGenerator from "./components/VideoScriptGenerator/VideoScriptGenerator";
 function App() {
   const [selectedScript, SetSelectedScript] = useState<string | undefined>(
     undefined
@@ -9,9 +8,11 @@ function App() {
   return (
     <div className="App">
       {!selectedScript && (
-        <StartPage onSelectScript={(script) => SetSelectedScript(script)} />
+        <VideoScriptGenerator
+          onSelectScript={(script) => SetSelectedScript(script)}
+        />
       )}
-      {selectedScript && <ImageGeneration selectedScript={selectedScript} />}
+      {selectedScript && <ImageGenerator selectedScript={selectedScript} />}
     </div>
   );
 }
