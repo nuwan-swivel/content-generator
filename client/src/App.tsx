@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import ImageGenerator from "./components/ImageGenerator/ImageGenerator";
+import ImageGenerator from "./components/ImagesGenerator/ImageGenerator";
 import VideoScriptGenerator from "./components/VideoScriptGenerator/VideoScriptGenerator";
 function App() {
   const [selectedScript, SetSelectedScript] = useState<string | undefined>(
