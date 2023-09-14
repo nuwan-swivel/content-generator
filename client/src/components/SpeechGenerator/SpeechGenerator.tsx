@@ -8,14 +8,16 @@ interface SpeechGeneratorProps {}
 const config = {
   region: "us-east-1",
   credentials: {
-    accessKeyId: "",
-    secretAccessKey: "",
+    accessKeyId: `${process.env.REACT_APP_AWS_ACCESS_KEY_ID}`,
+    secretAccessKey: `${process.env.REACT_APP_AWS_SECRET_ACCESS_KEY}`,
   },
 };
 
 const pollyClient = new Polly(config);
 
-export default function SpeechGenerator(props: SpeechGeneratorProps): ReactElement {
+export default function SpeechGenerator(
+  props: SpeechGeneratorProps
+): ReactElement {
   const [text, setText] = useState<string | null>(defaultText);
   const [audioURL, setAudioURL] = useState("");
   const [generating, setGenerating] = useState<boolean>(false);

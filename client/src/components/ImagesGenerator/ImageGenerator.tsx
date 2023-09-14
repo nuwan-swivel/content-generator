@@ -60,8 +60,7 @@ function ImageGenerator({ selectedScript }: Props) {
       method: "POST",
       url: "https://api.edenai.run/v2/image/generations",
       headers: {
-        authorization:
-          "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiYzE4ZjMxMGYtM2VmYy00NGE5LWI2ZTAtYzEyNjRmYmMyOGRiIiwidHlwZSI6ImFwaV90b2tlbiJ9.V-Z9tfoE6cKLYY-en2N7qjrMClld3asqvhvpzLqhCRA",
+        authorization: `Bearer ${process.env.REACT_APP_EDEN_AI_API_KEY}`,
       },
       data: {
         providers: "openai",

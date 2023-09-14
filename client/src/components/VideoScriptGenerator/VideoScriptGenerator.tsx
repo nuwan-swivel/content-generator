@@ -24,7 +24,7 @@ function VideoScriptGenerator({ onSelectScript }: Props) {
   const onGenerateClick = async () => {
     setIsLoading(true);
     const openAi = new OpenAI({
-      apiKey: "",
+      apiKey: process.env.REACT_APP_OPEN_AI_API_KEY,
       dangerouslyAllowBrowser: true,
     });
 
