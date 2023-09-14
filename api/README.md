@@ -4,6 +4,10 @@
 
 Create a copy of the `example.env` file and rename it to `.env` and update the env values.
 
+- `AWS_ACCESS_KEY_ID`
+- `AWS_SECRET_ACCESS_KEY`
+- `OPEN_AI_API_KEY`
+
 ### Install
 
 `npm install`
