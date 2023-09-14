@@ -10,7 +10,7 @@ import {
   Typography,
 } from "@material-tailwind/react";
 import { useState } from "react";
-
+import { greatedImage } from "../data";
 function countWords(str: string) {
   // Use a regular expression to split the string by spaces and punctuation
   const words = str.split(/\s+|\p{P}/u);
@@ -43,7 +43,9 @@ interface Response {
 function ImageGeneration() {
   const [prompt, setPrompt] = useState("");
   const [generateImageCount, setGenerateImageCount] = useState(1);
-  const [createdImages, setCreatedImages] = useState([] as GeneratedImage[]);
+  const [createdImages, setCreatedImages] = useState([
+    greatedImage,
+  ] as GeneratedImage[]);
   function submitAi() {
     const options = {
       method: "POST",

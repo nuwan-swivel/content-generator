@@ -14,6 +14,8 @@
     "@types/aws-lambda": "^8.10.119",
     "aws-lambda": "^1.0.7",
     "esbuild": "^0.17.19",
+    "express": "^4.18.2",
+    "ffcreator": "^7.2.2",
     "serverless-esbuild": "^1.46.0"
   }
 }
