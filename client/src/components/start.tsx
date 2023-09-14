@@ -24,7 +24,7 @@ function StartPage({ onSelectScript }: Props) {
   const onGenerateClick = async () => {
     setIsLoading(true);
     const openAi = new OpenAI({
-      apiKey: "key",
+      apiKey: "",
       dangerouslyAllowBrowser: true,
     });
 
@@ -55,7 +55,7 @@ function StartPage({ onSelectScript }: Props) {
       {scripts.length === 0 && (
         <>
           <Typography variant="h3" color="blue-gray" className="mb-2">
-            Enter your prompt
+            What do you want to make?
           </Typography>
 
           <div className="input-wrapper">
@@ -68,7 +68,13 @@ function StartPage({ onSelectScript }: Props) {
             />
           </div>
           <Button onClick={onGenerateClick}>
-            {isLoading ? <Spinner /> : "Generate"}
+            {isLoading ? (
+              <>
+                <Spinner /> Generating...
+              </>
+            ) : (
+              "Generate"
+            )}
           </Button>
         </>
       )}
