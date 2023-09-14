@@ -28,7 +28,7 @@ const Segments = ({ segments }: Props) => {
         <TabsBody>
           {segments.map(({ imageScript, voiceScript }, i) => (
             <TabPanel key={i} value={i} className="py-0">
-              <div className="w-full">
+              <div className="w-full flex">
                 <div className="w-1/2">
                   <SegmentImage imageScript={imageScript} />
                 </div>

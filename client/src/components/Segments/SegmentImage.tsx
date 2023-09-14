@@ -1,4 +1,4 @@
-import { Typography } from "@material-tailwind/react";
+import { Button, Typography } from "@material-tailwind/react";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 
@@ -8,14 +8,13 @@ interface Props {
 const SegmentImage = ({ imageScript }: Props) => {
   const [image, setImage] = useState<string | undefined>(undefined);
 
-  useEffect(() => {
+  const generateImage = () => {
     // generate image
     const options = {
       method: "POST",
-      url: "https://api.edenai.run/v2/image/generations",
+      url: "https://api.edenai.run/v2/image/generation",
       headers: {
-        authorization:
-          "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiYzE4ZjMxMGYtM2VmYy00NGE5LWI2ZTAtYzEyNjRmYmMyOGRiIiwidHlwZSI6ImFwaV90b2tlbiJ9.V-Z9tfoE6cKLYY-en2N7qjrMClld3asqvhvpzLqhCRA",
+        authorization: `Bearer ${process.env.REACT_APP_EDEN_AI_API_KEY}`,
       },
       data: {
         providers: "openai",
@@ -26,9 +25,9 @@ const SegmentImage = ({ imageScript }: Props) => {
     };
     axios.request(options).then((response) => {
       console.log("response.data", response.data);
-      setImage(response.data.openai.items.pop());
+      setImage(response.data.openai.items.pop().image_resource_url);
     });
-  }, [imageScript]);
+  };
 
   return (
     <div className="w-full flex flex-col">
@@ -37,6 +36,7 @@ const SegmentImage = ({ imageScript }: Props) => {
       <div className="w-full">
         <img src={image} alt="Segment image" />
       </div>
+      <Button onClick={generateImage}>Generate</Button>
     </div>
   );
 };

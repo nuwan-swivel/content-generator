@@ -15,8 +15,9 @@ function App() {
   const [step, setStep] = useState<PROMPTS>(PROMPTS.VIDEO_SCRIPT);
   const [segments, setSegments] = useState<VideoSegment[]>([]);
 
-  function handleSelectSegments(segments: VideoSegment[]) {
-    setSegments(segments);
+  function handleSelectSegments(videoSegments: VideoSegment[]) {
+    console.log("segments", videoSegments);
+    setSegments(videoSegments);
     setStep(PROMPTS.AUDIO_IMAGE_GENERATION);
   }
 

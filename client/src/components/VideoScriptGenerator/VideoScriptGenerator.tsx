@@ -49,24 +49,26 @@ function VideoScriptGenerator({ onSubmit }: Props) {
     );
 
     if (imageScriptMatches) {
+      console.log("image scripts", imageScriptMatches);
       setImageDescriptions(imageScriptMatches);
     }
 
     const voiceScriptContent = `Generate ${segmentCount} voice scripts to describe the following content for a video presentation and separate them by double quotes. "${selectedScript}"`;
-    const videoScriptMatches = await getChatCompletions(
+    const voiceScriptMatches = await getChatCompletions(
       voiceScriptContent,
       /"(.*?)"/g
     );
 
-    if (videoScriptMatches) {
-      setVoiceDescriptions(videoScriptMatches);
+    if (voiceScriptMatches) {
+      console.log("voice scripts", voiceScriptMatches);
+      setVoiceDescriptions(voiceScriptMatches);
     }
 
     setIsLoading(false);
     onSubmit(
-      imageScripts.map((imageScript, i) => ({
+      (imageScriptMatches as string[]).map((imageScript, i) => ({
         imageScript,
-        voiceScript: voiceScripts[i],
+        voiceScript: (voiceScriptMatches as string[])[i],
       }))
     );
   };
