@@ -40,12 +40,14 @@ interface Response {
   data: ResponseData;
 }
 
-function ImageGeneration() {
-  const [prompt, setPrompt] = useState("");
-  const [generateImageCount, setGenerateImageCount] = useState(1);
-  const [createdImages, setCreatedImages] = useState([
-    greatedImage,
-  ] as GeneratedImage[]);
+interface Props {
+  selectedScript: string;
+}
+
+function ImageGeneration({ selectedScript }: Props) {
+  const [script, setScript] = useState(selectedScript);
+  const [generateImageCount, setGenerateImageCount] = useState(3);
+  const [createdImages, setCreatedImages] = useState([] as GeneratedImage[]);
   function submitAi() {
     const options = {
       method: "POST",
@@ -56,7 +58,7 @@ function ImageGeneration() {
       },
       data: {
         providers: "openai",
-        text: prompt,
+        text: script,
         resolution: "512x512",
         num_images: generateImageCount,
       },
@@ -82,16 +84,17 @@ function ImageGeneration() {
             color="gray"
             className="mb-4 grid h-28 place-items-center"
           >
-            Text to Image
+            Images for your video
           </CardHeader>
           <CardBody className="flex flex-col gap-4">
             <Textarea
               label="Enter Your Prompt"
-              onChange={(e) => setPrompt(e.target.value)}
+              onChange={(e) => setScript(e.target.value)}
             />
             <Input
               label="Number of images"
               type="number"
+              value={generateImageCount}
               onChange={(e) =>
                 setGenerateImageCount(e.target.value as unknown as number)
               }
