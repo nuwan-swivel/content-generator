@@ -89,6 +89,7 @@ function ImageGeneration({ selectedScript }: Props) {
           <CardBody className="flex flex-col gap-4">
             <Textarea
               label="Enter Your Prompt"
+              value={script}
               onChange={(e) => setScript(e.target.value)}
             />
             <Input
