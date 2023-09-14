@@ -1,34 +1,30 @@
 import React, { useState } from "react";
 import ImageGenerator from "./components/ImagesGenerator/ImageGenerator";
-import SpeechGenerator from "./components/SpeechGenerator/SpeechGenerator";
 import VideoScriptGenerator from "./components/VideoScriptGenerator/VideoScriptGenerator";
+import { VideoSegment } from "./types";
+import Segments from "./components/Segments/Segments";
 
 enum PROMPTS {
   VIDEO_SCRIPT = "VIDEO_SCRIPT",
-  IMAGE_GENERATION = "IMAGE_GENERATION",
-  AUDIO_GENERATION = "AUDIO_GENERATION",
+  AUDIO_IMAGE_GENERATION = "AUDIO_IMAGE_GENERATION",
 }
 
 function App() {
   const [step, setStep] = useState<PROMPTS>(PROMPTS.VIDEO_SCRIPT);
+  const [segments, setSegments] = useState<VideoSegment[]>([]);
 
-  const [videoScript, setVideoScript] = useState<string | undefined>(undefined);
-
-  function handleSelectVideoScript(script: string) {
-    setVideoScript(script);
-    setStep(PROMPTS.IMAGE_GENERATION);
+  function handleSelectSegments(segments: VideoSegment[]) {
+    setSegments(segments);
+    setStep(PROMPTS.AUDIO_IMAGE_GENERATION);
   }
 
   function renderComponent() {
     switch (step) {
       case PROMPTS.VIDEO_SCRIPT:
-        return (
-          <VideoScriptGenerator onSelectScript={handleSelectVideoScript} />
-        );
-      case PROMPTS.IMAGE_GENERATION:
-        return <ImageGenerator selectedScript={videoScript || ""} />;
-      case PROMPTS.AUDIO_GENERATION:
-        return <SpeechGenerator />;
+        return <VideoScriptGenerator onSubmit={handleSelectSegments} />;
+      case PROMPTS.AUDIO_IMAGE_GENERATION:
+        return <Segments segments={segments} />;
+
       default:
         return <div>Steps not supported</div>;
     }

@@ -9,45 +9,66 @@ import {
   TabsHeader,
   Typography,
 } from "@material-tailwind/react";
-import OpenAI from "openai";
 import React, { useState } from "react";
 import "./VideoScriptGenerator.css";
+import { getChatCompletions } from "../../helpers/openAI.helper";
+import { VideoSegment } from "../../types";
 
 interface Props {
-  onSelectScript: (script: string) => void;
+  onSubmit: (segments: VideoSegment[]) => void;
 }
-function VideoScriptGenerator({ onSelectScript }: Props) {
-  const [prompt, setPrompt] = useState("");
-  const [scripts, setScripts] = useState<string[]>([]);
+function VideoScriptGenerator({ onSubmit }: Props) {
   const [isLoading, setIsLoading] = useState(false);
+  const [prompt, setPrompt] = useState(
+    "Introduction video for swivel hackathon 2023"
+  );
+  const [scripts, setScripts] = useState<string[]>([]);
+  const [selectedScript, setSelectedScript] = useState<string | null>(null);
+  const [segmentCount, setSegmentCount] = useState(0);
+  const [imageScripts, setImageDescriptions] = useState<string[]>([]);
+  const [voiceScripts, setVoiceDescriptions] = useState<string[]>([]);
 
   const onGenerateClick = async () => {
     setIsLoading(true);
-    const openAi = new OpenAI({
-      apiKey: process.env.REACT_APP_OPEN_AI_API_KEY,
-      dangerouslyAllowBrowser: true,
-    });
 
     const content = `write 3 transcripts for the following description and output each inside double quotes as a csv string and don't include headers, placeholders, numbering or indexes. Description:  ${prompt}`;
-
-    const result = await openAi.chat.completions.create({
-      model: "gpt-3.5-turbo",
-      messages: [{ role: "user", content }],
-      temperature: 0.3,
-    });
-
-    // setScripts(result.choices.pop()?.message?.content?.split(",,") ?? []);
-    const matches = result.choices.pop()?.message?.content?.match(/"(.*?)"/g);
+    const matches = await getChatCompletions(content, /"(.*?)"/g);
 
     if (matches) {
-      for (const element of matches) {
-        const match = element;
-        const substring = match.substring(1, match.length - 1); // quotation mark removing
-        console.log(substring);
-      }
       setScripts([...matches]);
     }
     setIsLoading(false);
+  };
+
+  const onNextClick = async () => {
+    setIsLoading(true);
+    const imageScriptContent = `Generate ${segmentCount} image descriptions to cover the following content for a video presentation and separate them by double quotes. "${selectedScript}"`;
+    const imageScriptMatches = await getChatCompletions(
+      imageScriptContent,
+      /"(.*?)"/g
+    );
+
+    if (imageScriptMatches) {
+      setImageDescriptions(imageScriptMatches);
+    }
+
+    const voiceScriptContent = `Generate ${segmentCount} voice scripts to describe the following content for a video presentation and separate them by double quotes. "${selectedScript}"`;
+    const videoScriptMatches = await getChatCompletions(
+      voiceScriptContent,
+      /"(.*?)"/g
+    );
+
+    if (videoScriptMatches) {
+      setVoiceDescriptions(videoScriptMatches);
+    }
+
+    setIsLoading(false);
+    onSubmit(
+      imageScripts.map((imageScript, i) => ({
+        imageScript,
+        voiceScript: voiceScripts[i],
+      }))
+    );
   };
 
   return (
@@ -79,7 +100,7 @@ function VideoScriptGenerator({ onSelectScript }: Props) {
         </>
       )}
 
-      {scripts.length > 0 && (
+      {scripts.length > 0 && !selectedScript && (
         <>
           <Typography variant="h3" color="blue-gray" className="mb-2">
             Select a script
@@ -98,7 +119,7 @@ function VideoScriptGenerator({ onSelectScript }: Props) {
                   <Typography variant="paragraph" className="mb-1">
                     {script}
                   </Typography>
-                  <Button onClick={() => onSelectScript(script)}>
+                  <Button onClick={() => setSelectedScript(script)}>
                     Select script {i + 1}
                   </Button>
                 </TabPanel>
@@ -111,6 +132,34 @@ function VideoScriptGenerator({ onSelectScript }: Props) {
             onClick={() => setScripts([])}
           >
             Retry
+          </Button>
+        </>
+      )}
+
+      {selectedScript && (
+        <>
+          <Typography variant="h3" color="blue-gray" className="mb-2">
+            How many segments do you need in the video?
+          </Typography>
+
+          <div className="input-wrapper">
+            <Input
+              label="Segment count"
+              type="number"
+              max={5}
+              value={segmentCount}
+              onChange={(e) => setSegmentCount(parseInt(e.target.value))}
+              crossOrigin={undefined}
+            />
+          </div>
+          <Button onClick={onNextClick}>
+            {isLoading ? (
+              <>
+                <Spinner /> Loading...
+              </>
+            ) : (
+              "Next"
+            )}
           </Button>
         </>
       )}
