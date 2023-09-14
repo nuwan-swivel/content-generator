@@ -24,6 +24,13 @@ app.post('/video', async (req, res) => {
    return res.status(200).send({message: 'Video created successfully', videoUrl});
 });
 
+app.post('/audio', async (req, res) => {
+    const {audio} = req.body;
+   const fileName = `video-${Math.random()*1000}.mp4`
+
+   return res.status(200).send({message: 'Audio created successfully', audio});
+});
+
 app.get('/files/:filename', (req, res) => {
   const filename = req.params.filename;
   console.log("🚀 ~ file: server.js:25 ~ app.get ~ __dirname:", __dirname)
