@@ -13,10 +13,16 @@ import React, { useState } from "react";
 import "./VideoScriptGenerator.css";
 import { getChatCompletions } from "../../helpers/openAI.helper";
 import { VideoSegment } from "../../types";
+import styled from "styled-components";
 
 interface Props {
   onSubmit: (segments: VideoSegment[]) => void;
 }
+
+const TabWrapper = styled.div` {
+  width: 800px;
+  margin: 0;
+}`;
 function VideoScriptGenerator({ onSubmit }: Props) {
   const [isLoading, setIsLoading] = useState(false);
   const [prompt, setPrompt] = useState(
@@ -74,7 +80,7 @@ function VideoScriptGenerator({ onSubmit }: Props) {
   };
 
   return (
-    <div className="wrapper">
+    <TabWrapper className="wrapper">
       {scripts.length === 0 && (
         <>
           <Typography variant="h3" color="blue-gray" className="mb-2">
@@ -103,11 +109,11 @@ function VideoScriptGenerator({ onSubmit }: Props) {
       )}
 
       {scripts.length > 0 && !selectedScript && (
-        <>
+        <div className="container">
           <Typography variant="h3" color="blue-gray" className="mb-2">
             Select a script
           </Typography>
-          <Tabs value="html">
+          <Tabs value={0}>
             <TabsHeader>
               {scripts.map((_s, i) => (
                 <Tab key={i} value={i}>
@@ -135,7 +141,7 @@ function VideoScriptGenerator({ onSubmit }: Props) {
           >
             Retry
           </Button>
-        </>
+        </div>
       )}
 
       {selectedScript && (
@@ -165,7 +171,7 @@ function VideoScriptGenerator({ onSubmit }: Props) {
           </Button>
         </>
       )}
-    </div>
+    </TabWrapper>
   );
 }
 
