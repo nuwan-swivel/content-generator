@@ -127,6 +127,11 @@ function VideoScriptGenerator({ onSubmit }: Props) {
                   <Typography variant="paragraph" className="mb-1">
                     {script}
                   </Typography>
+                  <div className="my-5 p-2">
+                    <Button className="mr-2">Edit</Button>
+                    <Button>Enhance</Button>
+                    <hr/>
+                  </div>
                   <Button onClick={() => setSelectedScript(script)}>
                     Select script {i + 1}
                   </Button>
