@@ -1,10 +1,12 @@
-import { insertEmphasis } from "./insertEmphasis";
+import { insertPause, insertProsody, insertDelay } from "./toolbarIconHandler";
 
 export const modules = {
   toolbar: {
     container: "#toolbar",
     handlers: {
-      insertEmphasis: insertEmphasis,
+      insertPause: insertPause,
+      insertProsody: insertProsody,
+      insertDelay: insertDelay,
     },
   },
   clipboard: {
