@@ -1,9 +1,13 @@
-import { ReactElement, useState } from "react";
+import { ReactElement, useEffect, useState } from "react";
 import { Polly, SynthesizeSpeechCommand } from "@aws-sdk/client-polly";
 import { defaultText } from "./SpeechEditor/DefaultText";
 import SpeechEditor from "./SpeechEditor/SpeechEditor";
+import { Button } from "@material-tailwind/react";
 
-interface SpeechGeneratorProps {}
+interface SpeechGeneratorProps {
+  voiceScript: string;
+  onSaveVoice: (url: string) => void;
+}
 
 const config = {
   region: "us-east-1",
@@ -15,10 +19,13 @@ const config = {
 
 const pollyClient = new Polly(config);
 
-export default function SpeechGenerator(
-  props: SpeechGeneratorProps
-): ReactElement {
-  const [text, setText] = useState<string | null>(defaultText);
+export default function SpeechGenerator({
+  voiceScript,
+  onSaveVoice,
+}: SpeechGeneratorProps): ReactElement {
+  const [text, setText] = useState<string | null>(
+    `<speak>${voiceScript}</speak>`
+  );
   const [audioURL, setAudioURL] = useState("");
   const [generating, setGenerating] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
@@ -31,7 +38,9 @@ export default function SpeechGenerator(
           const uInt8Array = await audio.transformToByteArray();
           const arrayBuffer = uInt8Array.buffer;
           const blob = new Blob([arrayBuffer]);
-          setAudioURL(URL.createObjectURL(blob));
+          const url = URL.createObjectURL(blob);
+          setAudioURL(url);
+          onSaveVoice(url);
         }
       } catch (error) {
         console.error("Error:", error);
@@ -81,14 +90,14 @@ export default function SpeechGenerator(
       </div>
       <div>
         <SpeechEditor
-          inputValue={defaultText}
+          inputValue={text as string}
           onTextChanged={handleOnTextChange}
         ></SpeechEditor>
       </div>
       <div>
-        <button type="button" onClick={handlePayButtonOnClick}>
-          {!generating ? "Play" : "Generating..."}
-        </button>
+        <Button type="button" className="mb-2" onClick={handlePayButtonOnClick}>
+          {!generating ? "Generate audio" : "Generating..."}
+        </Button>
       </div>
       <div>{audioURL && <audio controls src={audioURL} autoPlay={true} />}</div>
       <div>{error ? <p>{error}</p> : null}</div>
