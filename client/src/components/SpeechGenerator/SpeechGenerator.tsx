@@ -41,7 +41,15 @@ export default function SpeechGenerator({
           const blob = new Blob([arrayBuffer]);
           const url = URL.createObjectURL(blob);
           setAudioURL(url);
-          onSaveVoice(url);
+
+          const reader = new FileReader();
+          reader.readAsDataURL(blob);
+          reader.onloadend = function () {
+            const base64data = reader.result;
+            console.log(base64data);
+            console.log("blob", blob);
+            onSaveVoice(base64data as string);
+          };
         }
       } catch (error) {
         console.error("Error:", error);

@@ -4,7 +4,6 @@ import VideoScriptGenerator from "./components/VideoScriptGenerator/VideoScriptG
 import { VideoSegment } from "./types";
 import Segments from "./components/Segments/Segments";
 import VideoOutput from "./components/VideoOutput/VideoOutput";
-import SegmentImage from "./components/Segments/SegmentImage";
 
 enum PROMPTS {
   VIDEO_SCRIPT = "VIDEO_SCRIPT",
@@ -17,34 +16,14 @@ function App() {
   const [segments, setSegments] = useState<VideoSegment[]>([
     { imageScript: "He", voiceScript: "He" },
   ]);
-  const [selectedImage, setSelectedImage] = useState([] as string[]);
+  const [videoUrl, setVideoUrl] = useState("");
   function handleSelectSegments(videoSegments: VideoSegment[]) {
     console.log("segments", videoSegments);
     setSegments(videoSegments);
     setStep(PROMPTS.AUDIO_IMAGE_GENERATION);
   }
 
-  function handleSelectImage(imageDataUrl: string) {
-    setSelectedImage((prevSelectedImages) => [
-      ...prevSelectedImages,
-      imageDataUrl,
-    ]);
-  }
-
-  function handleRemoveImage(imageDataUrl: string) {
-    setSelectedImage((prevSelectedImages) =>
-      prevSelectedImages.filter((image) => image !== imageDataUrl)
-    );
-  }
-
   function renderComponent() {
-    // return (
-    //   <Segments
-    //     segments={segments}
-    //     onSelectedImage={handleSelectImage}
-    //     onRemoveSelectedImage={handleRemoveImage}
-    //   />
-    // );
     switch (step) {
       case PROMPTS.VIDEO_SCRIPT:
         return <VideoScriptGenerator onSubmit={handleSelectSegments} />;
@@ -52,19 +31,15 @@ function App() {
         return (
           <Segments
             segments={segments}
-            onSelectedImage={handleSelectImage}
-            onRemoveSelectedImage={handleRemoveImage}
+            onVideoUrlGenerated={(url) => {
+              setVideoUrl(url);
+              setStep(PROMPTS.VIDEO_OUTPUT);
+            }}
           />
         );
 
       case PROMPTS.VIDEO_OUTPUT:
-        return (
-          <VideoOutput
-            videoUrl={
-              "https://player.vimeo.com/video/522678746/config?autopause=1&byline=0&collections=0&context=Vimeo%5CController%5CClipController.main&default_to_hd=1&h=9029ef9102&outro=nothing&portrait=0&share=1&speed=1&title=0&watch_trailer=0&s=63509a2e2ecc02e187759ef96dfa1c26ffbc178c_1694803587"
-            }
-          />
-        );
+        return <VideoOutput videoUrl={videoUrl} />;
 
       default:
         return <div>Steps not supported</div>;
