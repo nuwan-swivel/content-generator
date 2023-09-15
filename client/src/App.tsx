@@ -4,6 +4,7 @@ import VideoScriptGenerator from "./components/VideoScriptGenerator/VideoScriptG
 import { VideoSegment } from "./types";
 import Segments from "./components/Segments/Segments";
 import VideoOutput from "./components/VideoOutput/VideoOutput";
+import SegmentImage from "./components/Segments/SegmentImage";
 
 enum PROMPTS {
   VIDEO_SCRIPT = "VIDEO_SCRIPT",
@@ -13,20 +14,49 @@ enum PROMPTS {
 
 function App() {
   const [step, setStep] = useState<PROMPTS>(PROMPTS.VIDEO_SCRIPT);
-  const [segments, setSegments] = useState<VideoSegment[]>([]);
-
+  const [segments, setSegments] = useState<VideoSegment[]>([
+    { imageScript: "He", voiceScript: "He" },
+  ]);
+  const [selectedImage, setSelectedImage] = useState([] as string[]);
   function handleSelectSegments(videoSegments: VideoSegment[]) {
     console.log("segments", videoSegments);
     setSegments(videoSegments);
     setStep(PROMPTS.AUDIO_IMAGE_GENERATION);
   }
 
+  function handleSelectImage(imageDataUrl: string) {
+    setSelectedImage((prevSelectedImages) => [
+      ...prevSelectedImages,
+      imageDataUrl,
+    ]);
+  }
+
+  function handleRemoveImage(imageDataUrl: string) {
+    setSelectedImage((prevSelectedImages) =>
+      prevSelectedImages.filter((image) => image !== imageDataUrl)
+    );
+  }
+
   function renderComponent() {
+    // return (
+    //   <Segments
+    //     segments={segments}
+    //     onSelectedImage={handleSelectImage}
+    //     onRemoveSelectedImage={handleRemoveImage}
+    //   />
+    // );
     switch (step) {
       case PROMPTS.VIDEO_SCRIPT:
         return <VideoScriptGenerator onSubmit={handleSelectSegments} />;
       case PROMPTS.AUDIO_IMAGE_GENERATION:
-        return <Segments segments={segments} />;
+        return (
+          <Segments
+            segments={segments}
+            onSelectedImage={handleSelectImage}
+            onRemoveSelectedImage={handleRemoveImage}
+          />
+        );
+
       case PROMPTS.VIDEO_OUTPUT:
         return (
           <VideoOutput
