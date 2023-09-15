@@ -42,7 +42,7 @@ const SegmentImage = ({
       },
       data: {
         providers: "openai",
-        text: imageScript,
+        text: `generate image inside 420px width and 614 height frame ${imageScript}`,
         resolution: "512x512",
         num_images: 1,
       },

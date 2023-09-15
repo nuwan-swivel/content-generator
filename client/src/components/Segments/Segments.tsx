@@ -13,17 +13,13 @@ import SegmentImage from "./SegmentImage";
 import SpeechGenerator from "../SpeechGenerator/SpeechGenerator";
 import axios from "axios";
 import { apiHelper } from "../../helpers/axios.helper";
+import { on } from "events";
 
 interface Props {
   segments: VideoSegment[];
-  onSelectedImage: (imageUrl: string) => void;
-  onRemoveSelectedImage: (imageUrl: string) => void;
+  onVideoUrlGenerated: (url: string) => void;
 }
-const Segments = ({
-  segments,
-  onSelectedImage,
-  onRemoveSelectedImage,
-}: Props) => {
+const Segments = ({ segments, onVideoUrlGenerated }: Props) => {
   const [selectedTab, setSelectedTab] = useState(0);
   const [updatedSegments, setUpdatedSegments] =
     useState<VideoSegment[]>(segments);
@@ -32,6 +28,14 @@ const Segments = ({
     setUpdatedSegments(
       updatedSegments.map((segment, i) =>
         i === segmentIndex ? { ...segment, image: img } : segment
+      )
+    );
+  };
+
+  const onRemoveImage = (segmentIndex: number) => {
+    setUpdatedSegments(
+      updatedSegments.map((segment, i) =>
+        i === segmentIndex ? { ...segment, image: undefined } : segment
       )
     );
   };
@@ -65,6 +69,8 @@ const Segments = ({
         audioUrls: updatedSegments.map((segment) => segment.voice),
       },
     });
+
+    onVideoUrlGenerated(result.videoUrl);
   };
 
   return (
@@ -86,7 +92,7 @@ const Segments = ({
                   <SegmentImage
                     imageScript={imageScript}
                     onSelectedImage={(img) => onSaveImage(img, i)}
-                    onRemoveSelectedImage={onRemoveSelectedImage}
+                    onRemoveSelectedImage={() => onRemoveImage(i)}
                   />
                 </div>
                 <div className="w-1/2 p-2">
