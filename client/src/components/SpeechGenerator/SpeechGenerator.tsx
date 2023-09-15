@@ -1,4 +1,4 @@
-import { ReactElement, useEffect, useState } from "react";
+import { ChangeEvent, ReactElement, useEffect, useState } from "react";
 import { Polly, SynthesizeSpeechCommand } from "@aws-sdk/client-polly";
 import { defaultText } from "./SpeechEditor/DefaultText";
 import SpeechEditor from "./SpeechEditor/SpeechEditor";
@@ -29,6 +29,7 @@ export default function SpeechGenerator({
   const [audioURL, setAudioURL] = useState("");
   const [generating, setGenerating] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
+  const [voiceGender, setVoiceGender] = useState<string>("Female");
 
   async function handlePayButtonOnClick(): Promise<void> {
     if (text !== null) {
@@ -55,6 +56,12 @@ export default function SpeechGenerator({
     setText(input);
   }
 
+  function handleOnChangeVoiceGender(
+    event: ChangeEvent<HTMLInputElement>
+  ): void {
+    setVoiceGender(event.target.value);
+  }
+
   async function generateSpeech() {
     if (text) {
       setGenerating(true);
@@ -63,7 +70,7 @@ export default function SpeechGenerator({
         LanguageCode: "en-US",
         OutputFormat: "mp3",
         Text: text,
-        VoiceId: "Joanna",
+        VoiceId: voiceGender === "Female" ? "Joanna" : "Joey",
         //SpeechMarkTypes: ["ssml"],
         TextType: "ssml",
       };
@@ -86,13 +93,36 @@ export default function SpeechGenerator({
     <div>
       <h1>Audio Generator</h1>
       <div>
-        <label>Enter text to speech</label>
-      </div>
-      <div>
         <SpeechEditor
           inputValue={text as string}
           onTextChanged={handleOnTextChange}
         ></SpeechEditor>
+      </div>
+      <div className="py-5">
+        <p>Voice Gender</p>
+        <input
+          type="radio"
+          id="maleVoice"
+          name="voiceGender"
+          value="Male"
+          checked={voiceGender === "Male"}
+          onChange={handleOnChangeVoiceGender}
+        />
+        <label className="ml-2" htmlFor="maleVoice">
+          Male
+        </label>
+        <input
+          className="ml-2"
+          type="radio"
+          id="femaleVoice"
+          name="voiceGender"
+          value="Female"
+          checked={voiceGender === "Female"}
+          onChange={handleOnChangeVoiceGender}
+        />
+        <label className="ml-2" htmlFor="femaleVoice">
+          Female
+        </label>
       </div>
       <div>
         <Button type="button" className="mb-2" onClick={handlePayButtonOnClick}>
